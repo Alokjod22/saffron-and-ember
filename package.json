@@ -13,7 +13,7 @@
   "dependencies": {
     "@prisma/client": "^5.21.1",
     "bcryptjs": "^2.4.3",
-    "caniuse-lite": "^1.0.30001810",
+    "caniuse-lite": "1.0.30001580",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.9",
     "jsonwebtoken": "^9.0.2",
