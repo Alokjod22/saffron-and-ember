@@ -95,7 +95,6 @@ export default function Footer() {
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-charcoal-300">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-charcoal-300">Terms of Service</Link>
-            <Link href="/admin" className="hover:text-saffron-400">Admin Portal</Link>
           </div>
         </div>
       </div>

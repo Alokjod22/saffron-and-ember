@@ -161,14 +161,6 @@ export default function Navbar() {
                     <p className="text-xs font-semibold text-cream-100 truncate">{user.name}</p>
                     <p className="text-[10px] text-saffron-400 font-mono">{user.role}</p>
                   </div>
-                  {user.role === 'ADMIN' && (
-                    <Link
-                      href="/admin"
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-saffron-400 hover:bg-charcoal-800"
-                    >
-                      <ShieldCheck className="w-4 h-4" /> Admin Dashboard
-                    </Link>
-                  )}
                   <button
                     onClick={() => logout()}
                     className="w-full text-left flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-charcoal-800"
