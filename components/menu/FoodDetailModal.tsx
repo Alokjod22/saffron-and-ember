@@ -196,6 +196,6 @@ export default function FoodDetailModal({ dish, onClose }: FoodDetailModalProps)
           </div>
         </motion.div>
       </div>
-    </Presence>
+    </AnimatePresence>
   );
 }
