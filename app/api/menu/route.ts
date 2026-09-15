@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
 import { slugify } from '@/lib/utils';
 
 export async function GET(req: NextRequest) {
