@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  phone        String?
+  role         String        @default("CUSTOMER") // CUSTOMER | ADMIN
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  orders       Order[]
+  reservations Reservation[]
+  reviews      Review[]
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  image       String?
+  createdAt   DateTime   @default(now())
+  items       MenuItem[]
+}
+
+model MenuItem {
+  id              String      @id @default(cuid())
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name            String
+  slug            String      @unique
+  description     String
+  price           Float
+  image           String
+  vegetarian      Boolean     @default(false)
+  vegan           Boolean     @default(false)
+  spicyLevel      Int         @default(0) // 0: None, 1: Mild, 2: Medium, 3: Hot
+  preparationTime String      @default("20 mins")
+  calories        Int         @default(450)
+  popular         Boolean     @default(false)
+  available       Boolean     @default(true)
+  featured        Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  orderItems      OrderItem[]
+  reviews         Review[]
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  status          String      @default("PENDING") // PENDING, CONFIRMED, PREPARING, READY, COMPLETED, CANCELLED
+  orderType       String      @default("DELIVERY") // DINE_IN, TAKEAWAY, DELIVERY
+  subtotal        Float
+  tax             Float
+  discount        Float       @default(0)
+  total           Float
+  paymentStatus   String      @default("PENDING") // PENDING, PAID, FAILED
+  deliveryAddress String?
+  customerName    String?
+  customerEmail   String?
+  customerPhone   String?
+  createdAt       DateTime    @default(now())
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId     String
+  menuItem       MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity       Int
+  price          Float
+  customizations String?  // JSON stringified customization details
+}
+
+model Reservation {
+  id             String   @id @default(cuid())
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name           String
+  phone          String
+  email          String
+  date           String   // YYYY-MM-DD
+  time           String   // e.g. "19:00"
+  guests         Int
+  tableNumber    String   // e.g. "T1", "T2", ...
+  status         String   @default("CONFIRMED") // PENDING, CONFIRMED, CANCELLED, COMPLETED
+  specialRequest String?
+  createdAt      DateTime @default(now())
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName   String   @default("Food Enthusiast")
+  menuItemId String?
+  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  rating     Int      @default(5)
+  comment    String
+  createdAt  DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  status    String   @default("UNREAD") // UNREAD, READ, RESOLVED
+  createdAt DateTime @default(now())
+}
